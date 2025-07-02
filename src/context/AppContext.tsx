@@ -8,7 +8,7 @@ export interface Ingredient {
   unit: string;
   expiryDate: string;
   addedDate: string;
-  tags?: string[]; // Add tags to help with categorization
+  tags?: string[]; // Enhanced tags for multi-category support
 }
 
 export interface Recipe {
@@ -77,7 +77,7 @@ const initialState: AppState = {
       unit: 'kg',
       expiryDate: '2025-01-10',
       addedDate: '2025-01-01',
-      tags: ['protein', 'meat', 'chicken']
+      tags: ['protein', 'meat', 'chicken', 'fridge', 'lean']
     },
     {
       id: '2',
@@ -87,7 +87,7 @@ const initialState: AppState = {
       unit: 'g',
       expiryDate: '2025-01-08',
       addedDate: '2025-01-01',
-      tags: ['vegetable', 'green', 'cruciferous']
+      tags: ['vegetable', 'green', 'cruciferous', 'fridge', 'fresh']
     },
     {
       id: '3',
@@ -97,7 +97,7 @@ const initialState: AppState = {
       unit: 'kg',
       expiryDate: '2025-03-01',
       addedDate: '2025-01-01',
-      tags: ['grain', 'carbs', 'staple']
+      tags: ['grain', 'carbs', 'staple', 'pantry', 'dried']
     },
     {
       id: '4',
@@ -107,7 +107,7 @@ const initialState: AppState = {
       unit: 'g',
       expiryDate: '2025-01-07',
       addedDate: '2025-01-01',
-      tags: ['protein', 'fish', 'omega3']
+      tags: ['protein', 'fish', 'omega3', 'fridge', 'fresh']
     },
     {
       id: '5',
@@ -117,27 +117,27 @@ const initialState: AppState = {
       unit: 'piece',
       expiryDate: '2025-01-12',
       addedDate: '2025-01-01',
-      tags: ['vegetable', 'colorful', 'vitamin-c']
+      tags: ['vegetable', 'colorful', 'vitamin-c', 'fridge', 'fresh']
     },
     {
       id: '6',
       name: 'Frozen Peas',
-      category: 'Frozen',
+      category: 'Vegetables',
       quantity: 500,
       unit: 'g',
       expiryDate: '2025-06-01',
       addedDate: '2025-01-01',
-      tags: ['vegetable', 'frozen', 'green']
+      tags: ['vegetable', 'frozen', 'green', 'freezer']
     },
     {
       id: '7',
       name: 'Ground Beef',
-      category: 'Frozen',
+      category: 'Protein',
       quantity: 1,
       unit: 'kg',
       expiryDate: '2025-04-01',
       addedDate: '2025-01-01',
-      tags: ['protein', 'meat', 'beef', 'frozen']
+      tags: ['protein', 'meat', 'beef', 'frozen', 'freezer']
     },
     {
       id: '8',
@@ -147,7 +147,7 @@ const initialState: AppState = {
       unit: 'g',
       expiryDate: '2025-12-01',
       addedDate: '2025-01-01',
-      tags: ['grain', 'carbs', 'italian']
+      tags: ['grain', 'carbs', 'italian', 'pantry', 'dried']
     },
     {
       id: '9',
@@ -157,7 +157,27 @@ const initialState: AppState = {
       unit: 'jar',
       expiryDate: '2025-08-01',
       addedDate: '2025-01-01',
-      tags: ['sauce', 'tomato', 'italian']
+      tags: ['sauce', 'tomato', 'italian', 'pantry', 'jarred']
+    },
+    {
+      id: '10',
+      name: 'Frozen Chicken Thighs',
+      category: 'Protein',
+      quantity: 1.5,
+      unit: 'kg',
+      expiryDate: '2025-05-01',
+      addedDate: '2025-01-01',
+      tags: ['protein', 'meat', 'chicken', 'frozen', 'freezer', 'dark-meat']
+    },
+    {
+      id: '11',
+      name: 'Frozen Salmon Portions',
+      category: 'Protein',
+      quantity: 800,
+      unit: 'g',
+      expiryDate: '2025-04-15',
+      addedDate: '2025-01-01',
+      tags: ['protein', 'fish', 'omega3', 'frozen', 'freezer', 'portioned']
     }
   ],
   recipes: [
@@ -452,6 +472,66 @@ const initialState: AppState = {
       },
       tags: ['Vegetarian', 'Healthy', 'Colorful'],
       image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg'
+    },
+    {
+      id: '11',
+      name: 'Frozen Chicken Thigh Curry',
+      ingredients: [
+        { name: 'Frozen Chicken Thighs', quantity: 600, unit: 'g' },
+        { name: 'Rice', quantity: 200, unit: 'g' },
+        { name: 'Bell Peppers', quantity: 1, unit: 'piece' },
+        { name: 'Frozen Peas', quantity: 150, unit: 'g' }
+      ],
+      instructions: [
+        'Thaw chicken thighs completely and cut into pieces.',
+        'Cook rice according to package instructions.',
+        'Brown chicken pieces in a large pan.',
+        'Add curry spices and diced bell peppers.',
+        'Simmer for 20 minutes until chicken is tender.',
+        'Add frozen peas in last 5 minutes and serve over rice.'
+      ],
+      prepTime: 15,
+      cookTime: 30,
+      servings: 3,
+      nutrition: {
+        calories: 420,
+        protein: 32,
+        carbs: 45,
+        fat: 14,
+        fiber: 5
+      },
+      tags: ['Curry', 'Frozen Friendly', 'Spicy'],
+      image: 'https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg'
+    },
+    {
+      id: '12',
+      name: 'Frozen Salmon Teriyaki Bowl',
+      ingredients: [
+        { name: 'Frozen Salmon Portions', quantity: 400, unit: 'g' },
+        { name: 'Rice', quantity: 200, unit: 'g' },
+        { name: 'Broccoli', quantity: 250, unit: 'g' },
+        { name: 'Bell Peppers', quantity: 1, unit: 'piece' }
+      ],
+      instructions: [
+        'Thaw salmon portions according to package instructions.',
+        'Cook rice according to package directions.',
+        'Steam broccoli and bell peppers for 8 minutes.',
+        'Pan-sear salmon with teriyaki sauce for 4 minutes per side.',
+        'Assemble bowls with rice, vegetables, and salmon.',
+        'Drizzle with extra teriyaki sauce.'
+      ],
+      prepTime: 20,
+      cookTime: 25,
+      servings: 2,
+      nutrition: {
+        calories: 480,
+        protein: 35,
+        carbs: 52,
+        fat: 16,
+        fiber: 6
+      },
+      tags: ['Asian', 'Frozen Friendly', 'Balanced'],
+      image: 'https://images.pexels.com/photos/725997/pexels-photo-725997.jpeg'
     }
   ],
   mealPlans: [],
