@@ -88,7 +88,7 @@ const Inventory: React.FC = () => {
       }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
       // Combine storage location and additional tags
@@ -102,8 +102,7 @@ const Inventory: React.FC = () => {
         allTags.push('frozen');
       }
 
-      const newIngredient: Ingredient = {
-        id: ingredient?.id || Date.now().toString(),
+      const ingredientData = {
         name: formData.name,
         category: formData.category,
         quantity: formData.quantity,
@@ -112,7 +111,21 @@ const Inventory: React.FC = () => {
         addedDate: ingredient?.addedDate || new Date().toISOString().split('T')[0],
         tags: [...new Set(allTags)] // Remove duplicates
       };
-      onSubmit(newIngredient);
+
+      try {
+        if (ingredient && state.firebaseService) {
+          // Update existing ingredient
+          await state.firebaseService.updateIngredient(ingredient.id, ingredientData);
+        } else if (state.firebaseService) {
+          // Add new ingredient
+          const id = await state.firebaseService.addIngredient(ingredientData);
+          const newIngredient: Ingredient = { id, ...ingredientData };
+          dispatch({ type: 'ADD_INGREDIENT', payload: newIngredient });
+        }
+        onSubmit({ id: ingredient?.id || '', ...ingredientData });
+      } catch (error) {
+        console.error('Error saving ingredient:', error);
+      }
     };
 
     return (
@@ -288,17 +301,21 @@ const Inventory: React.FC = () => {
   };
 
   const handleAddIngredient = (ingredient: Ingredient) => {
-    dispatch({ type: 'ADD_INGREDIENT', payload: ingredient });
     setShowAddForm(false);
   };
 
   const handleUpdateIngredient = (ingredient: Ingredient) => {
-    dispatch({ type: 'UPDATE_INGREDIENT', payload: ingredient });
     setEditingIngredient(null);
   };
 
-  const handleDeleteIngredient = (id: string) => {
-    dispatch({ type: 'DELETE_INGREDIENT', payload: id });
+  const handleDeleteIngredient = async (id: string) => {
+    if (state.firebaseService) {
+      try {
+        await state.firebaseService.deleteIngredient(id);
+      } catch (error) {
+        console.error('Error deleting ingredient:', error);
+      }
+    }
   };
 
   return (
